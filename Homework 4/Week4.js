@@ -1,8 +1,15 @@
+var waterLevel = 400;
+var waveSpeed = 0.10;
+var waveHeight = 5;
+var waveFrequency = 1.8; // Increased wave frequency
+
 //var blueberries
 var shapes = [];
 
 //fonts
 var myFont;
+var myFont2;
+var myFont3;
 
 //Butter Spin
 var ButterRotateAngle = 120;
@@ -29,10 +36,40 @@ var banana3Y = 100;
 var banana3XSpeed =0;
 var banana3YSpeed =0;
 
+//SyrupDrops
+var shapes = [];
+var syrupDrops = [];
+var SyrupDropX;
+var SyrupDropY;
+
+//Knife
+var Knife;
+var knifeX = -350, knifeY = -325;
+
+//Fork
+var Fork;
+var forkX = 230, forkY = -325;
+
+//Strawberry
+var Eggo
+var colorChangeSpeed = .005;
+var eggoX = -200
+var eggoY = 0
+var eggoXSpeed = 0
+var eggoYSpeed = 0
+
 function setup() 
 {
     createCanvas (800,800);
+    
+    Knife = loadImage("images/Knife.png");
+    Fork = loadImage("images/Fork.png");
+    Eggo = loadImage("images/Eggo.png")
+    
+    
     myFont = loadFont("fonts/Error.ttf");
+    myFont2 = loadFont("fonts/Retro.ttf");
+    myFont3 = loadFont("fonts/MyCoffeeBreak.ttf");
     
     bananaXSpeed = random(1,11);
     bananaYSpeed = random(1,11);
@@ -43,30 +80,54 @@ function setup()
     banana3XSpeed = random(1,11);
     banana3YSpeed = random(1,11);
 
-   
+    eggoXSpeed = random(1,11);
+    eggoYSpeed = random(1,11);
+
+   setInterval(createSyrupDrop, 1000); // Create a new syrup drop every second
 }
 
 function draw () 
 {
-    background(220);
+    background(255, 239, 221);
     
     translate(width / 2, height / 2);
+
+      
+  fill(50, 15, 0, 99); 
+  beginShape();
+  vertex(-400, height / 2);
+  for (let x = -400; x < width / 2; x += 10) {
+    let y = map(sin(x * waveFrequency + frameCount * waveSpeed), -1, 1, waterLevel - waveHeight, waterLevel + waveHeight);
+    vertex(x, y);
+  }
+  vertex(width / 2, height / 2);
+  endShape(CLOSE);
+  
+    waterLevel -=.02;
+  
+    if (waterLevel > 400) {
+    waterLevel = height / 2;
+  }
+
 
 //myname
 fill(0, 0, 0);
 textSize(35);
-textFont("myFont");
-text("Cameron Byers", 150, 350);
+textFont(myFont);
+text("Cameron Byers", 100, 350);
 
 //piece name
-textSize(35);
-textFont("myFont");
+fill(208, 160, 106)
+textSize(80);
+textFont(myFont3);
 text("Wacky Waffle", -385, -330);
 
 //blueberry hint
-textSize(25)
-textFont("myFont")
-text("Click on the Waffle To Add Blueberries!", -350, 330)
+fill(51, 81, 135)
+stroke(0)
+textSize(30)
+textFont(myFont2)
+text("Click on the Waffle To Add Blueberries!", -350, 300)
 
 //Waffle
 
@@ -133,7 +194,12 @@ fill(22, 15, 0, 99);
 ellipse(0,0,450,250);
 pop();
 
-//rotation reset
+// Draw syrup drops
+for (let i = 0; i < syrupDrops.length; i++) {
+    syrupDrops[i].display();
+    syrupDrops[i].update();
+  }
+
 
 
 //Butter
@@ -161,9 +227,32 @@ for (var i = 0; i < shapes.length; i++) {
       square(shapes[i].x, shapes[i].y, shapes[i].size);
     }
   }
-
   
-drawBananas();
+image(Knife, knifeX, knifeY);
+image(Fork, forkX, forkY);
+
+let r = (sin(frameCount * colorChangeSpeed) + 1) * 127; 
+let g = (sin(frameCount * colorChangeSpeed + PI / 2) + 1) * 127; 
+let b = (sin(frameCount * colorChangeSpeed + PI) + 1) * 127; 
+
+     tint(r, g, b);
+
+  image(Eggo, eggoX, eggoY, 200, 108);
+
+  eggoX += eggoXSpeed;
+  eggoY += eggoYSpeed;
+
+  if (eggoX + 400 / 2 >= width / 2 || eggoX - 0 / 2 <= -width / 2) {
+      eggoXSpeed *= -1; // Reverse x velocity
+  }
+  if (eggoY + 230 / 2 >= height / 2 || eggoY - 0 / 2 <= -height / 2) {
+      eggoYSpeed *= -1; // Reverse y velocity
+  }
+
+  noTint();
+
+  drawBananas();
+
 
 }
 
@@ -268,4 +357,31 @@ function mousecircle() {
         color: color(42, 57, 82),
         shape: 'square'
     });
+}
+
+function createSyrupDrop() {
+    let size = random(10, 23);
+    let drop = new SyrupDrop(random(-150, 200), random(0, 100), random(5, 5), size);
+    syrupDrops.push(drop);
+}
+
+class SyrupDrop {
+    constructor(x, y, speed, size) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.size = size; 
+    }
+
+    update() {
+        this.y += this.speed;
+        if (this.y > height) {
+           syrupDrops.splice(syrupDrops.indexOf(this), 1);
+        }
+    }
+
+    display() {
+        fill(22, 15, 0, 99);
+        ellipse(this.x, this.y, this.size, this.size * 3); 
+    }
 }
