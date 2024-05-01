@@ -70,7 +70,6 @@ rotate(90);
 fill(22, 15, 0, 99);
 ellipse(0,0,450,250);
 pop();
-
 //rotation reset
 
 
@@ -87,15 +86,15 @@ rect(-45,-45,90,90);
 pop();
 
 //blueberries
-fill(51, 81, 135);
-circle(100,70,50);
-fill(42, 57, 82);
-square(90,60,20);
+fill(51, 81, 135)
+circle(100,70,50)
+fill(42, 57, 82)
+square(90,60,20)
 
-fill(51, 81, 135);
-circle(-100,150,50);
-fill(42, 57, 82);
-square(-110,140,20);
+fill(51, 81, 135)
+circle(-100,150,50)
+fill(42, 57, 82)
+square(-110,140,20)
 
 fill(51, 81, 135);
 circle(-5,-150,50);
