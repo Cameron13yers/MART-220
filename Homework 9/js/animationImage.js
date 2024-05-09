@@ -26,11 +26,11 @@ class animationImage {
     createAnimation() {
         this.currentAnimation = new Sprite(this.x, this.y);
         this.currentAnimation.rotation = 0;
-        this.currentAnimation.frameDelay=500;
+        this.currentAnimation.frameDelay=.3;
     }
 
     myLoadAnimation(animationType, fileNames) {
-        this.currentAnimation.addAnimation(animationType, fileNames[2], fileNames[fileNames.length -1]);
+        this.currentAnimation.addAnimation(animationType, fileNames[1], fileNames[fileNames.length -1]);
         // set the hit box
         this.currentAnimation.width = 200;
         this.currentAnimation.height = 150;
@@ -51,7 +51,7 @@ class animationImage {
         }
         else
         {
-            this.currentAnimation.speed = 2;
+            this.currentAnimation.speed = 4;
         }
         
         if (animationType == 'walk' && this.direction == 'forward') {
